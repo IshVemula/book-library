@@ -82,7 +82,7 @@ export function SpineShelf({ books }: { books: Book[] }) {
                 Open book
               </Link>
               <button type="button" className="button ghost on-dark" onClick={() => setOpenId(null)}>
-                Put it back
+                Back on the shelf
               </button>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { BookForm, type Fields } from "@/components/BookForm";
 import { isAdmin } from "@/lib/auth";
 import { isStatus, listGenres, listSeries } from "@/lib/books";
 
-export const metadata = { title: "Add a book" };
+export const metadata = { title: "A new arrival" };
 
 type Params = { series?: string; series_number?: string; author?: string; status?: string };
 
@@ -22,9 +22,9 @@ export default async function NewBookPage({ searchParams }: { searchParams: Prom
 
   return (
     <section className="form-page">
-      <h1>Add a book</h1>
+      <h1>A new arrival</h1>
       <p className="muted form-page-hint">
-        Moving from Goodreads? <Link href="/import">Import your whole library</Link> instead.
+        Defecting from Goodreads? <Link href="/import">Bring your whole library</Link> with you.
       </p>
       <BookForm initial={initial} genres={genres} series={series} />
     </section>

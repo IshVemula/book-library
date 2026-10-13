@@ -9,6 +9,15 @@ export const STATUSES = {
 
 export type Status = keyof typeof STATUSES;
 
+// Headings for the status shelves on the home page (the plain labels above
+// are kept for buttons, filters and badges).
+export const SHELF_NAMES: Record<Status, string> = {
+  reading: "On the nightstand",
+  read: "Devoured",
+  want: "The TBR pile (send help)",
+  dnf: "Abandoned, no regrets",
+};
+
 export function isStatus(value: unknown): value is Status {
   return typeof value === "string" && value in STATUSES;
 }

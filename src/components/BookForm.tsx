@@ -238,7 +238,7 @@ function Lookup({ onPick, defaultQuery = "" }: { onPick: (r: LookupResult) => vo
   return (
     <div className="lookup">
       <label className="field">
-        <span>Find a book to auto-fill</span>
+        <span>Find it, and I&rsquo;ll fill in the boring bits</span>
         <input
           type="search"
           value={q}

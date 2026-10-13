@@ -1,11 +1,11 @@
-import { STATUSES, type Book, type Status } from "./types";
+import { SHELF_NAMES, STATUSES, type Book, type Status } from "./types";
 
 export const GROUPS = {
   status: "Reading status",
   author: "Author",
   series: "Series",
   genre: "Genre",
-  none: "Nothing",
+  none: "Nothing (chaos)",
 } as const;
 
 export type GroupBy = keyof typeof GROUPS;
@@ -38,7 +38,7 @@ export function groupBooks(books: Book[], by: GroupBy): BookGroup[] {
 
     case "status":
       return (Object.keys(STATUSES) as Status[])
-        .map((s) => ({ key: s, title: STATUSES[s], books: books.filter((b) => b.status === s) }))
+        .map((s) => ({ key: s, title: SHELF_NAMES[s], books: books.filter((b) => b.status === s) }))
         .filter((g) => g.books.length > 0);
 
     case "author": {
@@ -53,7 +53,7 @@ export function groupBooks(books: Book[], by: GroupBy): BookGroup[] {
       const groups = [...map.entries()]
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([genre, books]) => ({ key: genre, title: genre, books }));
-      return rest.length ? [...groups, { key: "~none", title: "No genre", books: rest }] : groups;
+      return rest.length ? [...groups, { key: "~none", title: "Defies categorization", books: rest }] : groups;
     }
 
     case "series": {
@@ -63,7 +63,7 @@ export function groupBooks(books: Book[], by: GroupBy): BookGroup[] {
       const groups = [...map.entries()]
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([series, books]) => ({ key: series, title: series, books: books.sort(byNumber) }));
-      return rest.length ? [...groups, { key: "~none", title: "Standalones", books: rest }] : groups;
+      return rest.length ? [...groups, { key: "~none", title: "Lone wolves (no series)", books: rest }] : groups;
     }
   }
 }

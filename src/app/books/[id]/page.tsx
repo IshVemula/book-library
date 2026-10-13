@@ -13,7 +13,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const book = await getBook(Number((await params).id));
-  return { title: book?.title ?? "Not found" };
+  return { title: book?.title ?? "Lost in the stacks" };
 }
 
 const ORDINALS = ["1st", "2nd", "3rd"];
@@ -38,7 +38,7 @@ export default async function BookPage({ params }: Props) {
   return (
     <article className="detail">
       <Link href="/" className="back">
-        ← Back to the shelves
+        ← Back to the stacks
       </Link>
       <div className="detail-layout">
         <Cover book={book} size="large" tags={bookTags(book)} />
@@ -117,12 +117,12 @@ export default async function BookPage({ params }: Props) {
               {book.lent_to ? (
                 <>
                   <p>
-                    <span aria-hidden>📖</span> Lent to <strong>{book.lent_to}</strong>
+                    <span aria-hidden>📖</span> Held hostage by <strong>{book.lent_to}</strong>
                     {book.lent_at && <span className="muted"> · {timeAgo(book.lent_at)}</span>}
                   </p>
                   <form action={returnBook.bind(null, book.id)}>
                     <button type="submit" className="button">
-                      Mark as returned
+                      It came home
                     </button>
                   </form>
                 </>
@@ -131,19 +131,19 @@ export default async function BookPage({ params }: Props) {
                   <label className="sr-only" htmlFor="lent_to">
                     Lend to
                   </label>
-                  <input id="lent_to" name="lent_to" placeholder="Lending it out? Who to…" required maxLength={80} />
+                  <input id="lent_to" name="lent_to" placeholder="Lending it out? To whom, exactly…" required maxLength={80} />
                   <button type="submit" className="button">
                     Lend
                   </button>
                 </form>
               )}
-              <p className="panel-hint">Only you can see who has your books.</p>
+              <p className="panel-hint">Only you can see who&rsquo;s got your books.</p>
             </section>
           )}
 
           {showHistory && (
             <section className="panel history" aria-labelledby="history-title">
-              <h2 id="history-title">Reading history</h2>
+              <h2 id="history-title">Couldn&rsquo;t stay away</h2>
               <ol>
                 <li>
                   <span className="history-n">1st read</span>
@@ -166,7 +166,7 @@ export default async function BookPage({ params }: Props) {
               </ol>
               {admin && (
                 <details className="log-reread" key={rereads.length}>
-                  <summary>+ Log a reread</summary>
+                  <summary>+ Read it again</summary>
                   <form action={logReread.bind(null, book.id)} className="reread-form">
                     <label className="field">
                       <span>Rating this time</span>

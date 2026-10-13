@@ -10,7 +10,7 @@ export function UpNext({ items, admin }: { items: UpNextItem[]; admin: boolean }
 
   return (
     <section className="up-next" aria-labelledby="up-next-title">
-      <h2 id="up-next-title">Up next in your series</h2>
+      <h2 id="up-next-title">Unfinished business</h2>
       <ul>
         {visible.map(({ series, number, author, book }) => (
           <li key={series}>
@@ -22,7 +22,7 @@ export function UpNext({ items, admin }: { items: UpNextItem[]; admin: boolean }
                     {series} #{number}
                   </span>
                   <strong>{book.title}</strong>
-                  <span className="muted">On your Want to read shelf</span>
+                  <span className="muted">Waiting in your TBR pile</span>
                 </span>
               </Link>
             ) : (
@@ -32,7 +32,7 @@ export function UpNext({ items, admin }: { items: UpNextItem[]; admin: boolean }
                   <span className="up-next-series">
                     {series} #{number}
                   </span>
-                  <strong>Not on your shelf yet</strong>
+                  <strong>Not acquired… yet</strong>
                   <span className="up-next-actions">
                     <Link
                       href={`/books/new?${new URLSearchParams({
@@ -42,11 +42,11 @@ export function UpNext({ items, admin }: { items: UpNextItem[]; admin: boolean }
                         status: "want",
                       })}`}
                     >
-                      Add it
+                      Get it
                     </Link>
                     <form action={finishSeries.bind(null, series)}>
                       <button type="submit" className="link-button" title="Stop suggesting books from this series">
-                        Series done
+                        I&rsquo;m done here
                       </button>
                     </form>
                   </span>

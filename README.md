@@ -1,6 +1,6 @@
-# 📚 My Bookshelf
+# 📚 Shelf Indulgence
 
-A cozy online bookshelf for keeping track of the books you've read.
+A cozy online bookshelf: a highly biased record of every book you've devoured.
 
 - Books stand on wooden shelves, grouped by **reading status, author, series or genre**, shown as covers, as **spines** packed side by side, or as a compact list
 - Mark books as **Read**, **Currently reading**, **Want to read** or **Did not finish** (with where you stopped)

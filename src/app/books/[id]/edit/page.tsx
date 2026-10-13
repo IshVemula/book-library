@@ -3,7 +3,7 @@ import { BookForm } from "@/components/BookForm";
 import { isAdmin } from "@/lib/auth";
 import { getBook, listGenres, listSeries } from "@/lib/books";
 
-export const metadata = { title: "Edit book" };
+export const metadata = { title: "Fix the details" };
 
 export default async function EditBookPage({ params }: { params: Promise<{ id: string }> }) {
   if (!(await isAdmin())) redirect("/login");
@@ -13,7 +13,7 @@ export default async function EditBookPage({ params }: { params: Promise<{ id: s
 
   return (
     <section className="form-page">
-      <h1>Edit book</h1>
+      <h1>Fix the details</h1>
       <BookForm book={book} genres={genres} series={series} />
     </section>
   );

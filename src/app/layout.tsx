@@ -9,8 +9,8 @@ const sans = Inter({ variable: "--font-sans", subsets: ["latin"] });
 const serif = Newsreader({ variable: "--font-serif", subsets: ["latin"], style: ["normal", "italic"] });
 
 export const metadata: Metadata = {
-  title: { default: "My Library", template: "%s · My Library" },
-  description: "A personal log of the books I've read.",
+  title: { default: "Shelf Indulgence", template: "%s · Shelf Indulgence" },
+  description: "A highly biased record of every book I've devoured.",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -21,7 +21,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body className={`${sans.variable} ${serif.variable}`}>
         <header className="site-header">
           <Link href="/" className="brand">
-            My Library
+            Shelf Indulgence
           </Link>
           <nav>
             {admin ? (

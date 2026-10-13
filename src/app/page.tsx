@@ -51,21 +51,21 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
     <>
       <section className="intro">
         <div>
-          <p className="eyebrow">A reading log</p>
-          <h1>My Bookshelf</h1>
+          <p className="eyebrow">A highly biased record of</p>
+          <h1>Every book I&rsquo;ve devoured</h1>
         </div>
         {!libraryEmpty && (
           <dl className="stats">
             <div>
-              <dt>Books read</dt>
+              <dt>Books devoured</dt>
               <dd>{stats.read}</dd>
             </div>
             <div>
-              <dt>Authors</dt>
+              <dt>Authors adored</dt>
               <dd>{stats.authors}</dd>
             </div>
             <div>
-              <dt>Avg rating</dt>
+              <dt>Average swoon</dt>
               <dd>{stats.avgRating ?? "—"}</dd>
             </div>
           </dl>
@@ -76,7 +76,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
 
       {lentOut.length > 0 && (
         <p className="on-loan">
-          <span aria-hidden>📖</span> On loan:{" "}
+          <span aria-hidden>📖</span> Held hostage by friends:{" "}
           {lentOut.map((b, i) => (
             <span key={b.id}>
               {i > 0 && ", "}
@@ -99,22 +99,22 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
 
       {libraryEmpty ? (
         <div className="empty">
-          <p className="empty-title">The shelves are empty</p>
-          <p>Books you add will show up here.</p>
+          <p className="empty-title">Suspiciously empty shelves</p>
+          <p>Every great library starts with one book. Or one Goodreads export.</p>
           {admin && (
             <div className="form-actions">
               <Link href="/books/new" className="button primary">
-                Add your first book
+                Shelve your first book
               </Link>
               <Link href="/import" className="button">
-                Import from Goodreads
+                Smuggle them in from Goodreads
               </Link>
             </div>
           )}
         </div>
       ) : books.length === 0 ? (
         <div className="empty">
-          <p>No books match.</p>
+          <p>Nothing here. Not even a bookmark.</p>
         </div>
       ) : (
         groups.map((g) => (

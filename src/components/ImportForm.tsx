@@ -171,10 +171,10 @@ export function ImportForm() {
       </p>
       <p className="muted">
         Books with an ISBN get their cover automatically. For any without, open the book, click Edit, and use
-        &ldquo;Find a book to auto-fill&rdquo; to grab a cover.
+        the &ldquo;Find it&rdquo; search box to grab a cover.
       </p>
       <Link href="/" className="button primary">
-        See your shelves
+        Go admire your shelves
       </Link>
     </div>
   );

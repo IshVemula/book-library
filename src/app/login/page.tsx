@@ -8,8 +8,8 @@ export default function LoginPage() {
 
   return (
     <section className="narrow login">
-      <h1>Log in</h1>
-      <p className="muted">Only the library owner can add or edit books.</p>
+      <h1>Who goes there?</h1>
+      <p className="muted">Only the keeper of these shelves gets to rearrange them.</p>
       <form action={action} className="book-form">
         <label className="field span-2">
           <span>Password</span>
