@@ -75,6 +75,9 @@ function trinketForShelf(books: Book[]): TrinketKind {
   return options[seed % options.length];
 }
 
+// Trinkets are switched off for now. Flip to true to put them back on the shelves.
+export const SHOW_TRINKETS = false;
+
 export type ShelfItem =
   | { type: "book"; book: Book }
   | { type: "trinket"; kind: TrinketKind; label: string; key: string };
@@ -83,6 +86,7 @@ export type ShelfItem =
 // last book of a matching series run), at most one per ~4 books, and always at
 // least one per shelf so even a short shelf feels lived in.
 export function withTrinkets(books: Book[]): ShelfItem[] {
+  if (!SHOW_TRINKETS) return books.map((book) => ({ type: "book", book }));
   const budget = Math.max(1, Math.ceil(books.length / 4));
   const used = new Set<TrinketKind>();
   const items: ShelfItem[] = [];

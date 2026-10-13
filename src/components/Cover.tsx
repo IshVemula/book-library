@@ -4,6 +4,7 @@ import type { Book } from "@/lib/types";
 type CoverBook = Pick<Book, "title" | "author" | "isbn" | "cover_url"> & {
   status?: Book["status"];
   series?: string | null;
+  series_number?: number | null;
 };
 
 function imageUrl(book: CoverBook, size: "M" | "L") {
