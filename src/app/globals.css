@@ -1710,58 +1710,6 @@ a.up-next-card:hover {
   }
 }
 
-/* Trinkets: little ornaments standing on the shelves between the books */
-
-.trinket {
-  display: block;
-  overflow: visible;
-  filter: drop-shadow(2px 3px 3px rgb(0 0 0 / 0.5));
-  transform-origin: 50% 100%;
-  transition: transform 0.25s ease;
-}
-
-.trinket:hover {
-  transform: rotate(-5deg) scale(1.06);
-}
-
-.shelf .trinket-cell {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  align-self: start;
-  height: var(--book-h);
-}
-
-.shelf .trinket-cell .trinket {
-  width: 72px;
-  height: 108px;
-}
-
-.spine-row .trinket-cell {
-  padding: 0 10px var(--plank-h);
-}
-
-.spine-row .trinket-cell .trinket {
-  width: 58px;
-  height: 87px;
-}
-
-@media (max-width: 640px) {
-  .shelf .trinket-cell .trinket {
-    width: 48px;
-    height: 72px;
-  }
-
-  .spine-row .trinket-cell {
-    padding: 0 6px var(--plank-h);
-  }
-
-  .spine-row .trinket-cell .trinket {
-    width: 38px;
-    height: 57px;
-  }
-}
-
 /* Cover picker (upload / paste / drop a custom cover) */
 
 .cover-picker {

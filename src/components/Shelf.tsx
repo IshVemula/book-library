@@ -1,28 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { withTrinkets } from "@/lib/trinkets";
 import { seriesLabel, type Book } from "@/lib/types";
 import { useFlip } from "./useFlip";
 import { bookTags, Cover } from "./Cover";
-import { Trinket } from "./Trinket";
 
 export function Shelf({ books }: { books: Book[] }) {
   const ref = useFlip<HTMLUListElement>(books);
   return (
     <div className="bookcase">
       <ul className="shelf" ref={ref}>
-        {withTrinkets(books).map((item) =>
-          item.type === "trinket" ? (
-            <li key={item.key} className="trinket-cell">
-              <Trinket kind={item.kind} label={item.label} />
-            </li>
-          ) : (
-            <li key={item.book.id} data-flip={`cover-${item.book.id}`}>
-              <ShelfBook book={item.book} />
-            </li>
-          ),
-        )}
+        {books.map((book) => (
+          <li key={book.id} data-flip={`cover-${book.id}`}>
+            <ShelfBook book={book} />
+          </li>
+        ))}
       </ul>
     </div>
   );

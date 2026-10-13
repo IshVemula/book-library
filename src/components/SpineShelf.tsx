@@ -6,11 +6,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { seriesLabel, STATUSES, type Book } from "@/lib/types";
 import { spineShape, swatchFor, SPINE_STYLES, bindingKey } from "@/lib/palette";
-import { withTrinkets } from "@/lib/trinkets";
 import { useFlip } from "./useFlip";
 import { bookTags, Cover } from "./Cover";
 import { Stars } from "./Stars";
-import { Trinket } from "./Trinket";
 
 // Colours and sizes come from the shared palette (so a spine matches its
 // generated cover, and a series looks like a box set). If two different books
@@ -40,15 +38,7 @@ export function SpineShelf({ books }: { books: Book[] }) {
   return (
     <div className="bookcase spines">
       <ul className="shelf spine-row" ref={ref}>
-        {withTrinkets(books).map((item) => {
-          if (item.type === "trinket") {
-            return (
-              <li key={item.key} className="trinket-cell">
-                <Trinket kind={item.kind} label={item.label} />
-              </li>
-            );
-          }
-          const { book } = item;
+        {books.map((book) => {
           const { cloth, ink, foil, width, height, style } = looks.get(book.id)!;
           return (
             <li key={book.id} data-flip={`spine-${book.id}`}>
