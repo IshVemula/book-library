@@ -127,3 +127,5 @@ src/
 ## License
 
 [MIT](LICENSE). Free to use, copy and change; just keep the copyright notice.
+
+Icons: [Lucide](https://lucide.dev) and [Lucide Lab](https://github.com/lucide-icons/lucide-lab) (ISC), plus the dragon from [Tabler Icons](https://tabler.io/icons) (MIT).

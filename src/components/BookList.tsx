@@ -4,6 +4,7 @@ import Link from "next/link";
 import { seriesLabel, type Book } from "@/lib/types";
 import { useFlip } from "./useFlip";
 import { bookTags, Cover } from "./Cover";
+import { GenreIcon } from "./GenreArt";
 import { Stars } from "./Stars";
 import { StatusBadge } from "./StatusBadge";
 
@@ -30,7 +31,13 @@ export function BookList({ books }: { books: Book[] }) {
                   ))}
                 </span>
               </span>
-              <span className="row-genre">{book.genre && <span className="chip">{book.genre}</span>}</span>
+              <span className="row-genre">
+                {book.genre && (
+                  <span className="chip">
+                    <GenreIcon genre={book.genre} /> {book.genre}
+                  </span>
+                )}
+              </span>
               <span className="row-status">
                 <StatusBadge status={book.status} />
               </span>

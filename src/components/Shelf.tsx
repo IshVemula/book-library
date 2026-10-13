@@ -5,6 +5,7 @@ import { withTrinkets } from "@/lib/trinkets";
 import { seriesLabel, type Book } from "@/lib/types";
 import { useFlip } from "./useFlip";
 import { bookTags, Cover } from "./Cover";
+import { MotifField, shelfGenre } from "./GenreArt";
 import { Trinket } from "./Trinket";
 
 export function Shelf({ books }: { books: Book[] }) {
@@ -12,6 +13,13 @@ export function Shelf({ books }: { books: Book[] }) {
   return (
     <div className="bookcase">
       <ul className="shelf" ref={ref}>
+        <MotifField
+          as="li"
+          className="motif-wall"
+          genre={shelfGenre(books)}
+          seed={`cover-${books[0]?.id}`}
+          rows={2 * Math.ceil(books.length / 8)}
+        />
         {withTrinkets(books).map((item) =>
           item.type === "trinket" ? (
             <li key={item.key} className="trinket-cell">

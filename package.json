@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.9",
+    "@lucide/lab": "^0.7.0",
     "@neondatabase/serverless": "^1.2.0",
     "lucide-react": "^1.56.0",
     "motion": "^14.2.0",
