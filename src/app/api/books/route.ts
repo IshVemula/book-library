@@ -1,4 +1,4 @@
-import { isSort, listBooks } from "@/lib/books";
+import { hidePrivate, isSort, listBooks } from "@/lib/books";
 
 export const dynamic = "force-dynamic";
 
@@ -11,5 +11,5 @@ export async function GET(request: Request) {
     genre: params.get("genre") ?? "",
     sort: isSort(sort) ? sort : "added",
   });
-  return Response.json(books);
+  return Response.json(books.map(hidePrivate));
 }

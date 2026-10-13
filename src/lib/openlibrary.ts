@@ -12,6 +12,8 @@ export type LookupResult = {
 // Earlier entries win, so specific genres come before broad ones.
 const GENRE_KEYWORDS: [string, string][] = [
   ["science fiction", "Science Fiction"],
+  ["sci-fi", "Science Fiction"],
+  ["scifi", "Science Fiction"],
   ["fantasy", "Fantasy"],
   ["mystery", "Mystery"],
   ["detective", "Mystery"],
@@ -37,6 +39,8 @@ const GENRE_KEYWORDS: [string, string][] = [
   ["classic", "Classics"],
   ["history", "History"],
   ["science", "Science"],
+  ["non-fiction", "Nonfiction"],
+  ["nonfiction", "Nonfiction"],
   ["fiction", "Fiction"],
 ];
 

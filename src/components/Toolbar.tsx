@@ -2,19 +2,27 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import { SORTS, STATUSES, type Status } from "@/lib/books";
+import { SORTS, STATUSES, type Status } from "@/lib/types";
 import { GROUPS } from "@/lib/group";
+
+export type View = "shelf" | "spines" | "list";
 
 type Props = {
   q: string;
   status: Status | "";
   group: string;
   sort: string;
-  view: "shelf" | "list";
+  view: View;
   counts: Record<Status | "all", number>;
 };
 
-const STATUS_TABS: [Status | "", string][] = [["", "All"], ["reading", "Reading"], ["read", "Read"], ["want", "Want to read"]];
+const STATUS_TABS: [Status | "", string][] = [
+  ["", "All"],
+  ["reading", "Reading"],
+  ["read", "Read"],
+  ["want", "Want to read"],
+  ["dnf", "DNF"],
+];
 
 export function Toolbar({ q, status, group, sort, view, counts }: Props) {
   const router = useRouter();
@@ -104,14 +112,20 @@ export function Toolbar({ q, status, group, sort, view, counts }: Props) {
         </label>
 
         <div className="segmented icons" role="group" aria-label="View">
-          <button type="button" aria-pressed={view === "shelf"} onClick={() => remember("view", "shelf")} title="Shelf view">
+          <button type="button" aria-pressed={view === "shelf"} onClick={() => remember("view", "shelf")} title="Cover view">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
               <rect x="4" y="3" width="4" height="14" rx="1" />
               <rect x="10" y="5" width="4" height="12" rx="1" />
               <path d="m16.5 6.5 3.5-1 3 11-3.5 1z" transform="translate(-2 0)" />
               <path d="M2 21h20" />
             </svg>
-            <span className="sr-only">Shelf</span>
+            <span className="sr-only">Covers</span>
+          </button>
+          <button type="button" aria-pressed={view === "spines"} onClick={() => remember("view", "spines")} title="Spine view">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+              <path d="M4 20V6M8 20V3M12 20V8M16 20V5M20 20V9" />
+            </svg>
+            <span className="sr-only">Spines</span>
           </button>
           <button type="button" aria-pressed={view === "list"} onClick={() => remember("view", "list")} title="List view">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>

@@ -2,10 +2,13 @@
 
 A cozy online bookshelf for keeping track of the books you've read.
 
-- Books stand on wooden shelves, grouped by **reading status, author, series or genre**
-- Mark books as **Read**, **Currently reading** or **Want to read**
+- Books stand on wooden shelves, grouped by **reading status, author, series or genre**, shown as covers, as **spines** packed side by side, or as a compact list
+- Mark books as **Read**, **Currently reading**, **Want to read** or **Did not finish** (with where you stopped)
+- **Import your whole Goodreads library** in one go: shelves, ratings, reviews, series and reread counts
 - Add a book by typing its title or ISBN, and the **author, cover and genre fill in automatically** (via [Open Library](https://openlibrary.org))
-- Ratings, notes, series order, live search, and a compact list view
+- **Up next:** finished book 2 of a series? Book 3 shows up at the top of your shelves
+- Log **rereads** with their own rating and notes, and keep track of **who you lent a book to** (private to you)
+- Ratings, notes, live search
 - Anyone with the link can browse your shelf; only you (with your password) can change it
 - Works on phones, with light and dark mode
 
@@ -30,7 +33,10 @@ That's it! You'll get a link like `my-bookshelf-abc.vercel.app`. To add books, o
 
 | To… | Do this |
 | --- | --- |
+| Bring over your Goodreads books | Log in → **+ Add book** → *Import your whole library*, then follow the steps |
 | Add a book | Log in → **+ Add book** → search for the title → click the right result → **Add to shelf** |
+| Log a reread | Open the book → **+ Log a reread** |
+| Lend a book | Open the book → type who has it → **Lend** (only you see this) |
 | Change a book's status | Open the book → click *Currently reading*, *Read* or *Want to read* |
 | Edit or delete a book | Open the book → **Edit** or **Delete** |
 | Rearrange your shelves | Use **Group by**, **Sort** and the shelf/list buttons above your books |
@@ -98,14 +104,18 @@ src/
     books/[id]/           book page and edit page
     books/new/            add-a-book page
     login/                owner login
+    import/               Goodreads import
     api/books/route.ts    public JSON API
     api/lookup/route.ts   Open Library search for auto-fill (owner only)
-    actions.ts            server actions: save, delete, set status, login, logout
-  components/             Shelf, BookList, Toolbar, Cover, BookForm, …
+    actions.ts            server actions: books, status, lending, rereads, import, login
+  components/             Shelf, SpineShelf, BookList, UpNext, ImportForm, BookForm, …
   lib/
     db.ts                 database connection + automatic migrations
+    types.ts              shared types and constants (safe for client components)
     books.ts              book queries
     group.ts              grouping by status / author / series / genre
+    upnext.ts             "next in series" suggestions
+    goodreads.ts          Goodreads CSV parser
     auth.ts               password login with a signed cookie
 ```
 

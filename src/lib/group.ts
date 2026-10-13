@@ -1,4 +1,4 @@
-import { STATUSES, type Book, type Status } from "./books";
+import { STATUSES, type Book, type Status } from "./types";
 
 export const GROUPS = {
   status: "Reading status",

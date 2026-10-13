@@ -3,24 +3,34 @@
 import Link from "next/link";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { saveBook, type FormState } from "@/app/actions";
-import { STATUSES, type Book } from "@/lib/books";
+import { STATUSES, type Book } from "@/lib/types";
 import type { LookupResult } from "@/lib/openlibrary";
 import { Cover } from "./Cover";
 
 const FIELDS = [
-  "title", "author", "series", "series_number", "genre", "status", "rating", "isbn", "cover_url", "notes",
+  "title", "author", "series", "series_number", "genre", "status", "rating", "isbn", "cover_url", "notes", "dnf_progress",
 ] as const;
-type Fields = Record<(typeof FIELDS)[number], string>;
+export type Fields = Record<(typeof FIELDS)[number], string>;
 
-function toFields(book?: Book): Fields {
-  const fields = Object.fromEntries(FIELDS.map((k) => [k, String(book?.[k] ?? "")])) as Fields;
+function toFields(book?: Book, initial: Partial<Fields> = {}): Fields {
+  const fields = Object.fromEntries(FIELDS.map((k) => [k, String(initial[k] ?? book?.[k] ?? "")])) as Fields;
   fields.status ||= "read";
   return fields;
 }
 
-export function BookForm({ book, genres, series }: { book?: Book; genres: string[]; series: string[] }) {
+export function BookForm({
+  book,
+  initial,
+  genres,
+  series,
+}: {
+  book?: Book;
+  initial?: Partial<Fields>; // prefill for a new book, e.g. "next in series"
+  genres: string[];
+  series: string[];
+}) {
   const [state, dispatch, pending] = useActionState<FormState, FormData>(saveBook, {});
-  const [f, setF] = useState(() => toFields(book));
+  const [f, setF] = useState(() => toFields(book, initial));
   const [filledFrom, setFilledFrom] = useState<string | null>(null);
 
   const bind = (key: keyof Fields) => ({
@@ -70,7 +80,10 @@ export function BookForm({ book, genres, series }: { book?: Book; genres: string
       </aside>
 
       <div className="form-main">
-        <Lookup onPick={fill} />
+        <Lookup
+          onPick={fill}
+          defaultQuery={!book && initial?.series ? [initial.series, initial.author].filter(Boolean).join(" ") : ""}
+        />
         {filledFrom && (
           <p className="filled-note" role="status">
             Filled in from Open Library. Check the details below.
@@ -98,6 +111,15 @@ export function BookForm({ book, genres, series }: { book?: Book; genres: string
               ))}
             </div>
           </fieldset>
+
+          {f.status === "dnf" && (
+            <label className="field span-2">
+              <span>
+                Where did you stop? <small>(optional)</small>
+              </span>
+              <input {...bind("dnf_progress")} placeholder="e.g. page 120, or chapter 9" />
+            </label>
+          )}
 
           <label className="field span-2">
             <span>Title</span>
@@ -180,8 +202,8 @@ export function BookForm({ book, genres, series }: { book?: Book; genres: string
   );
 }
 
-function Lookup({ onPick }: { onPick: (r: LookupResult) => void }) {
-  const [q, setQ] = useState("");
+function Lookup({ onPick, defaultQuery = "" }: { onPick: (r: LookupResult) => void; defaultQuery?: string }) {
+  const [q, setQ] = useState(defaultQuery);
   const [results, setResults] = useState<LookupResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { Book } from "@/lib/books";
-import { Cover } from "./Cover";
+import type { Book } from "@/lib/types";
+import { bookTags, Cover } from "./Cover";
 import { seriesLabel } from "./Shelf";
 import { Stars } from "./Stars";
 import { StatusBadge } from "./StatusBadge";
@@ -10,6 +10,7 @@ export function BookList({ books }: { books: Book[] }) {
     <ul className="book-list">
       {books.map((book) => {
         const series = seriesLabel(book);
+        const tags = bookTags(book).filter((t) => t !== "DNF"); // the status badge already says it
         return (
           <li key={book.id}>
             <Link href={`/books/${book.id}`} className="row">
@@ -19,6 +20,11 @@ export function BookList({ books }: { books: Book[] }) {
                 <span className="row-sub">
                   {book.author}
                   {series && <> · {series}</>}
+                  {tags.map((t) => (
+                    <span key={t} className="mini-tag">
+                      {t}
+                    </span>
+                  ))}
                 </span>
               </span>
               <span className="row-genre">{book.genre && <span className="chip">{book.genre}</span>}</span>

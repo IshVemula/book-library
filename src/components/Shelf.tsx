@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { Book } from "@/lib/books";
-import { Cover } from "./Cover";
+import type { Book } from "@/lib/types";
+import { bookTags, Cover } from "./Cover";
 
 export function seriesLabel(book: Pick<Book, "series" | "series_number">) {
   if (!book.series) return null;
@@ -18,7 +18,7 @@ export function Shelf({ books }: { books: Book[] }) {
               className={`shelf-book status-${book.status}`}
               title={`${book.title} by ${book.author}`}
             >
-              <Cover book={book} />
+              <Cover book={book} tags={bookTags(book)} />
               <span className="shelf-label">
                 <span className="shelf-title">{book.title}</span>
                 <span className="shelf-author">{seriesLabel(book) ?? book.author}</span>
