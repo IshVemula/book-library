@@ -4,14 +4,24 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 const COOKIE = "library_session";
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days, in seconds
 
-function env(name: "ADMIN_PASSWORD" | "SESSION_SECRET") {
-  const value = process.env[name];
-  if (!value) throw new Error(`${name} is not set`);
+function adminPassword() {
+  const value = process.env.ADMIN_PASSWORD;
+  if (!value) throw new Error("ADMIN_PASSWORD is not set");
   return value;
 }
 
+// SESSION_SECRET is optional so a fresh deploy only needs ADMIN_PASSWORD.
+// Without it, derive a key from the password and database URL (which holds
+// the database's own password). Changing the admin password logs everyone out.
+function sessionSecret() {
+  return (
+    process.env.SESSION_SECRET ||
+    createHash("sha256").update(`session:${adminPassword()}:${process.env.DATABASE_URL ?? "local"}`).digest("hex")
+  );
+}
+
 function sign(value: string) {
-  return createHmac("sha256", env("SESSION_SECRET")).update(value).digest("base64url");
+  return createHmac("sha256", sessionSecret()).update(value).digest("base64url");
 }
 
 // Hash both sides first so the comparison is constant-time regardless of length.
@@ -22,7 +32,7 @@ function safeEqual(a: string, b: string) {
 }
 
 export function checkPassword(password: string) {
-  return safeEqual(password, env("ADMIN_PASSWORD"));
+  return safeEqual(password, adminPassword());
 }
 
 export async function isAdmin() {

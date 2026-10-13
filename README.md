@@ -1,57 +1,114 @@
-# My Library
+# 📚 My Bookshelf
 
-A personal bookshelf: books on wooden shelves grouped by reading status, author, series or genre, with a list view, live search, and auto-fill from Open Library when adding a book.
+A cozy online bookshelf for keeping track of the books you've read.
 
-Anyone can browse the library; only the owner (password login) can add, edit, or delete books.
+- Books stand on wooden shelves, grouped by **reading status, author, series or genre**
+- Mark books as **Read**, **Currently reading** or **Want to read**
+- Add a book by typing its title or ISBN, and the **author, cover and genre fill in automatically** (via [Open Library](https://openlibrary.org))
+- Ratings, notes, series order, live search, and a compact list view
+- Anyone with the link can browse your shelf; only you (with your password) can change it
+- Works on phones, with light and dark mode
 
-**Stack:** Next.js 15 (App Router, Server Actions) · Postgres (Neon in production, embedded PGlite locally) · deployed on Vercel.
+## Get your own bookshelf (free, about 3 minutes)
 
-## Run locally
+You don't need to know how to code. You'll need a free [GitHub](https://github.com/signup) account.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FIshVemula%2Fbook-library&project-name=my-bookshelf&repository-name=my-bookshelf&env=ADMIN_PASSWORD&envDescription=The+password+you+will+use+to+log+in+and+add+books.+Pick+something+only+you+know.&envLink=https%3A%2F%2Fgithub.com%2FIshVemula%2Fbook-library%23setup-details&stores=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22neon%22%2C%22productSlug%22%3A%22neon%22%2C%22protocol%22%3A%22storage%22%7D%5D)
+
+1. **Click the button above** and sign in to Vercel with your GitHub account.
+2. **Follow the steps.** Vercel will:
+   - copy this project into your GitHub account,
+   - create a free database for your books (just accept the defaults),
+   - ask you for a **password**. This is what you'll use to log in and add books, so pick something only you know.
+3. **Click Deploy** and wait a minute or two.
+
+That's it! You'll get a link like `my-bookshelf-abc.vercel.app`. To add books, open that link, click **Log in**, and enter your password.
+
+> 💡 Bookmark your link and share it with friends. They can see your shelf but can't change anything.
+
+## Using your bookshelf
+
+| To… | Do this |
+| --- | --- |
+| Add a book | Log in → **+ Add book** → search for the title → click the right result → **Add to shelf** |
+| Change a book's status | Open the book → click *Currently reading*, *Read* or *Want to read* |
+| Edit or delete a book | Open the book → **Edit** or **Delete** |
+| Rearrange your shelves | Use **Group by**, **Sort** and the shelf/list buttons above your books |
+| Change your password | Vercel → your project → **Settings → Environment Variables** → edit `ADMIN_PASSWORD` → then **Deployments → ⋯ → Redeploy** |
+
+## Customizing it
+
+Your copy of the code lives in your own GitHub account, and every change you push there updates your site automatically. Some easy places to start:
+
+- **Colors:** the top of [`src/app/globals.css`](src/app/globals.css) (light mode first, dark mode below it)
+- **Site name and fonts:** [`src/app/layout.tsx`](src/app/layout.tsx)
+- **Home page heading:** [`src/app/page.tsx`](src/app/page.tsx)
+
+You can edit files right on github.com: open the file, click the ✏️ pencil icon, then **Commit changes**.
+
+---
+
+## Setup details
+
+For developers, or for setting things up by hand.
+
+### Settings (environment variables)
+
+| Name | Required | What it's for |
+| --- | --- | --- |
+| `ADMIN_PASSWORD` | Yes | The password for logging in and editing books. |
+| `DATABASE_URL` | In production | Postgres connection string. Added automatically when you connect Neon on Vercel. |
+| `SESSION_SECRET` | No | Random string for signing the login cookie. If unset, one is derived from the password and database URL. |
+| `PGLITE_PATH` | No | Local only: where the embedded dev database lives (default `./.pglite`). |
+
+### Run it on your computer
+
+Requires [Node.js](https://nodejs.org) 20+.
 
 ```bash
+git clone https://github.com/IshVemula/book-library.git
+cd book-library
 npm install
-cp .env.example .env.local   # then set ADMIN_PASSWORD and SESSION_SECRET
+cp .env.example .env.local   # then set ADMIN_PASSWORD in .env.local
 npm run dev
 ```
 
-Open http://localhost:3000. With no `DATABASE_URL`, data is stored in an embedded Postgres in `./.pglite` (git-ignored). The `books` table is created automatically on first request.
+Then open http://localhost:3000. Locally the books are stored in an embedded Postgres database (`./.pglite`), so there's nothing else to install. Database tables are created and updated automatically on startup.
 
-## Environment variables
+### Deploy by hand (instead of the button)
 
-| Name | Purpose |
-| --- | --- |
-| `DATABASE_URL` | Postgres connection string (Neon). Required in production. |
-| `ADMIN_PASSWORD` | Password for the owner login. |
-| `SESSION_SECRET` | Random string for signing the login cookie (`openssl rand -base64 32`). |
+1. Fork this repo.
+2. On [vercel.com](https://vercel.com): **Add New → Project** → import your fork.
+3. **Storage → Create Database → Neon** and connect it to the project (this sets `DATABASE_URL`).
+4. **Settings → Environment Variables**: add `ADMIN_PASSWORD`.
+5. **Deployments → ⋯ → Redeploy**.
 
-## Deploy (Vercel + Neon)
+### API
 
-1. Push this repo to GitHub.
-2. On [vercel.com](https://vercel.com), sign up with GitHub → **Add New → Project** → import the repo.
-3. In the project, open **Storage → Create Database → Neon (Postgres)** and connect it. This sets `DATABASE_URL` automatically.
-4. In **Settings → Environment Variables**, add `ADMIN_PASSWORD` and `SESSION_SECRET`.
-5. **Deployments → Redeploy**. Every push to `main` deploys automatically after that.
+`GET /api/books?q=&genre=&sort=added|title|author|rating` returns the shelf as JSON.
 
-## API
+### Tech and structure
 
-`GET /api/books?q=&genre=&sort=added|title|author|rating` returns the library as JSON.
-
-## Structure
+Next.js 15 (App Router, Server Actions) · Postgres (Neon in production, PGlite locally) · Vercel.
 
 ```
 src/
   app/
     page.tsx              bookshelf / list view with grouping, status tabs, search, stats
-    books/[id]/           book detail, edit page
-    books/new/            add page
+    books/[id]/           book page and edit page
+    books/new/            add-a-book page
     login/                owner login
     api/books/route.ts    public JSON API
-    api/lookup/route.ts   Open Library search proxy (owner only) for auto-fill
-    actions.ts            server actions (save, delete, login, logout)
+    api/lookup/route.ts   Open Library search for auto-fill (owner only)
+    actions.ts            server actions: save, delete, set status, login, logout
   components/             Shelf, BookList, Toolbar, Cover, BookForm, …
   lib/
-    db.ts                 Postgres connection (Neon or PGlite) + schema
+    db.ts                 database connection + automatic migrations
     books.ts              book queries
     group.ts              grouping by status / author / series / genre
-    auth.ts               signed-cookie session
+    auth.ts               password login with a signed cookie
 ```
+
+## License
+
+[MIT](LICENSE). Free to use, copy and change; just keep the copyright notice.
