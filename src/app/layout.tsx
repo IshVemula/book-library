@@ -47,6 +47,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <main>
           <Providers>{children}</Providers>
         </main>
+        <footer className="site-footer">
+          Covers from{" "}
+          <a href="https://openlibrary.org" target="_blank" rel="noreferrer">
+            Open Library
+          </a>{" "}
+          and{" "}
+          <a href="https://books.google.com" target="_blank" rel="noreferrer">
+            Google Books
+          </a>
+          .
+        </footer>
       </body>
     </html>
   );

@@ -36,6 +36,7 @@ That's it! You'll get a link like `my-bookshelf-abc.vercel.app`. To add books, o
 | Bring over your Goodreads books | Log in → **+ Add book** → *Import your whole library*, then follow the steps |
 | Add a book | Log in → **+ Add book** → search for the title → click the right result → **Add to shelf** |
 | Change a cover | Open the book → **Edit** → under the cover, **Upload image**, drop a file on it, or paste an image or image link (e.g. copied from Google) |
+| Make a series' covers match | Group by **Series** → **Match covers** next to the series name (or **Match series covers** on a book's page) → pick a matching set → **Save** |
 | Log a reread | Open the book → **+ Log a reread** |
 | Lend a book | Open the book → type who has it → **Lend** (only you see this) |
 | Change a book's status | Open the book → click *Currently reading*, *Read* or *Want to read* |
@@ -66,6 +67,7 @@ For developers, or for setting things up by hand.
 | `ADMIN_PASSWORD` | Yes | The password for logging in and editing books. |
 | `DATABASE_URL` | In production | Postgres connection string. Added automatically when you connect Neon on Vercel. |
 | `SESSION_SECRET` | No | Random string for signing the login cookie. If unset, one is derived from the password and database URL. |
+| `GOOGLE_BOOKS_API_KEY` | Recommended | Free Google Books API key, so cover search also checks Google Books. Without it, only Open Library is used (Google's keyless quota is effectively always used up). |
 | `PGLITE_PATH` | No | Local only: where the embedded dev database lives (default `./.pglite`). |
 
 ### Run it on your computer

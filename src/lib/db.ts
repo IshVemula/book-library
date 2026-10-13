@@ -40,6 +40,8 @@ const MIGRATIONS = [
     data       TEXT NOT NULL, -- base64; stored as text so both drivers return it the same way
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
   )`,
+  // When we last looked online for a cover for a book that had none.
+  `ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_checked_at TIMESTAMPTZ`,
 ];
 
 // Cache the connection across hot reloads in dev and across requests in prod.

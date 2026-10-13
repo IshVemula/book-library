@@ -1913,3 +1913,158 @@ a.up-next-card:hover {
   width: 100%;
   max-width: 260px;
 }
+
+/* Footer */
+
+.site-footer {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 20px 32px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.site-footer a {
+  color: inherit;
+}
+
+/* Missing covers notice + group heading action */
+
+.missing-covers {
+  margin: -12px 0 24px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.group-action {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.group-action:hover {
+  text-decoration: underline;
+}
+
+/* Match covers page */
+
+.match-page {
+  max-width: 1000px;
+}
+
+.match-page h2 {
+  margin: 36px 0 12px;
+  font-size: 1.35rem;
+}
+
+.matcher-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.matcher .shelf-book.picked .cover {
+  outline: 3px solid var(--star);
+  outline-offset: 2px;
+}
+
+.sets {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.set {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.set-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.set-covers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.set-covers img,
+.set-covers .cover-ghost {
+  width: 64px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 2px 4px 4px 2px;
+  box-shadow: 2px 3px 8px rgb(0 0 0 / 0.18);
+}
+
+.per-book h3 {
+  margin: 20px 0 8px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.05rem;
+}
+
+.per-book h3 .muted {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.option-strip {
+  display: flex;
+  gap: 10px;
+  padding: 4px 4px 10px;
+  overflow-x: auto;
+}
+
+.option {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 76px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.66rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option img {
+  width: 76px;
+  height: 114px;
+  object-fit: cover;
+  border-radius: 2px 4px 4px 2px;
+  box-shadow: 2px 3px 8px rgb(0 0 0 / 0.18);
+  transition: transform 0.15s;
+}
+
+.option:hover img {
+  transform: translateY(-3px);
+}
+
+.option[aria-pressed="true"] img {
+  outline: 3px solid var(--star);
+  outline-offset: 2px;
+}
+
+.option span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

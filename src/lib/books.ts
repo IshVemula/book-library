@@ -130,6 +130,45 @@ export async function deleteCoverImage(bookId: number) {
   await sql(`DELETE FROM cover_images WHERE book_id = $1`, [bookId]);
 }
 
+// Setting covers found online
+
+const COVER_HOSTS = /^https:\/\/(covers\.openlibrary\.org|books\.google\.com|books\.googleusercontent\.com)\//;
+
+export async function setCover(bookId: number, url: string, isbn: string | null) {
+  if (!COVER_HOSTS.test(url)) throw new Error("Unexpected cover host");
+  await sql(
+    `UPDATE books SET cover_url = $2, isbn = coalesce($3, isbn), cover_checked_at = now() WHERE id = $1`,
+    [bookId, url, isbn],
+  );
+  await deleteCoverImage(bookId);
+}
+
+export async function listSeriesBooks(series: string) {
+  return sql<Book>(
+    `SELECT ${COLUMNS} FROM books WHERE series = $1 ORDER BY series_number NULLS LAST, lower(title)`,
+    [series],
+  );
+}
+
+// Books with no cover we've never searched for (or whose owner removed it, which marks them checked).
+const MISSING = `cover_url IS NULL AND cover_checked_at IS NULL`;
+
+export async function countMissingCovers() {
+  const [row] = await sql<{ n: number }>(`SELECT count(*)::int AS n FROM books WHERE ${MISSING}`);
+  return row.n;
+}
+
+export async function listMissingCovers(limit: number) {
+  return sql<Pick<Book, "id" | "title" | "author" | "isbn">>(
+    `SELECT id, title, author, isbn FROM books WHERE ${MISSING} ORDER BY id LIMIT $1`,
+    [limit],
+  );
+}
+
+export async function markCoverChecked(bookId: number) {
+  await sql(`UPDATE books SET cover_checked_at = now() WHERE id = $1`, [bookId]);
+}
+
 // Series you've marked as finished (no more "add the next book" suggestions)
 
 export async function listFinishedSeries() {

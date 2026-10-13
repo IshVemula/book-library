@@ -6,6 +6,7 @@ import { useState } from "react";
 import { importGoodreads } from "@/app/actions";
 import { STATUSES, type ImportBook, type Status } from "@/lib/types";
 import { parseGoodreads } from "@/lib/goodreads";
+import { useFindCovers } from "./MissingCovers";
 
 const BATCH = 200;
 
@@ -18,6 +19,7 @@ type Phase =
 
 export function ImportForm() {
   const [phase, setPhase] = useState<Phase>({ step: "pick" });
+  const covers = useFindCovers();
 
   async function onFile(file: File | undefined) {
     if (!file) return;
@@ -43,6 +45,7 @@ export function ImportForm() {
       setPhase({ step: "importing", done: Math.min(i + BATCH, books.length), total: books.length });
     }
     setPhase({ step: "done", added, skipped });
+    if (added > 0) covers.run(); // look online for covers the import didn't bring
   }
 
   if (phase.step === "pick") {
@@ -171,9 +174,12 @@ export function ImportForm() {
         🎉 Added <strong>{phase.added}</strong> {phase.added === 1 ? "book" : "books"} to your shelves
         {phase.skipped > 0 && <> (skipped {phase.skipped} already there)</>}.
       </p>
-      <p className="muted">
-        Books with an ISBN get their cover automatically. For any without, open the book, click Edit, and use
-        the &ldquo;Find it&rdquo; search box to grab a cover.
+      <p className="muted" aria-live="polite">
+        {covers.running
+          ? `Now hunting for covers… ${covers.progress?.found ?? 0} found so far.`
+          : covers.progress
+            ? `Found covers for ${covers.progress.found} of ${covers.progress.checked} books that needed one. For the rest, use “Change the cover” on the book’s edit page.`
+            : "Books with an ISBN get their cover automatically."}
       </p>
       <Link href="/" className="button primary">
         <Library aria-hidden /> Go admire your shelves

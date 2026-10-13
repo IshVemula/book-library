@@ -1,5 +1,6 @@
 import { swatchStyle } from "@/lib/palette";
 import type { Book } from "@/lib/types";
+import { CoverImage } from "./CoverImage";
 
 type CoverBook = Pick<Book, "title" | "author" | "isbn" | "cover_url"> & {
   status?: Book["status"];
@@ -41,10 +42,7 @@ export function Cover({
     <div className={`cover cover-${size}`} style={swatchStyle(book)}>
       <span className="cover-title">{book.title}</span>
       <span className="cover-author">{book.author}</span>
-      {src && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" loading="lazy" />
-      )}
+      {src && <CoverImage key={src} src={src} />}
       {book.status === "reading" && <span className="ribbon" title="Currently reading" />}
       {tags.length > 0 && size !== "small" && (
         <span className="cover-tags">

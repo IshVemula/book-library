@@ -3,11 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { checkPassword, endSession, isAdmin, startSession } from "@/lib/auth";
+import { findCover } from "@/lib/covers";
 import {
   addReread,
   createBook,
   deleteBook,
   deleteCoverImage,
+  listMissingCovers,
+  markCoverChecked,
+  setCover,
   deleteReread,
   importBooks,
   isStatus,
@@ -90,6 +94,7 @@ export async function saveBook(_prev: FormState, fd: FormData): Promise<FormStat
   if (upload && (!image || image.length > 2_800_000)) return { error: "That cover image couldn't be saved. Try a smaller one." };
 
   let id = Number(fd.get("id"));
+  const isNew = !id;
   if (id) {
     await updateBook(id, book);
   } else {
@@ -100,11 +105,48 @@ export async function saveBook(_prev: FormState, fd: FormData): Promise<FormStat
   } else if (!book.cover_url?.startsWith(`/api/covers/${id}`)) {
     await deleteCoverImage(id); // cover was removed or replaced with a link
   }
+  if (!image && !book.cover_url) {
+    if (isNew) {
+      // A new book with no cover: try to find one online (best effort).
+      const found = await findCover(book).catch(() => null);
+      if (found) await setCover(id, found.url, book.isbn ?? found.isbn);
+      else await markCoverChecked(id);
+    } else {
+      await markCoverChecked(id); // the owner chose no cover; don't go looking for one
+    }
+  }
   // Adding to a series you'd marked finished means it isn't finished after all.
   if (book.series) await setSeriesFinished(book.series, false);
 
   refresh();
   redirect(`/books/${id}`);
+}
+
+// Look online for covers for books that have none, a few at a time (the page
+// calls this repeatedly so each request stays short).
+export async function fillMissingCovers() {
+  if (!(await isAdmin())) throw new Error("Not logged in");
+  const books = await listMissingCovers(4);
+  const results = await Promise.all(
+    books.map(async (book) => {
+      const found = await findCover(book).catch(() => null);
+      if (found) await setCover(book.id, found.url, book.isbn ?? found.isbn);
+      else await markCoverChecked(book.id);
+      return Boolean(found);
+    }),
+  );
+  if (books.length) refresh();
+  return { checked: books.length, found: results.filter(Boolean).length };
+}
+
+// Apply the covers chosen on the "Match covers" page.
+export async function saveSeriesCovers(series: string, picks: { bookId: number; url: string; isbn: string | null }[]) {
+  await requireAdmin();
+  for (const pick of picks.slice(0, 200)) {
+    await setCover(Number(pick.bookId), String(pick.url), pick.isbn ? String(pick.isbn).slice(0, 20) : null);
+  }
+  refresh();
+  redirect(`/?group=series&q=${encodeURIComponent(series)}`);
 }
 
 export async function setStatus(id: number, status: string) {

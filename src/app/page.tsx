@@ -1,13 +1,14 @@
 import { cookies } from "next/headers";
-import { BookPlus, FileUp, Handshake } from "lucide-react";
+import { BookPlus, FileUp, Handshake, Images } from "lucide-react";
 import Link from "next/link";
 import { BookList } from "@/components/BookList";
+import { MissingCovers } from "@/components/MissingCovers";
 import { Shelf } from "@/components/Shelf";
 import { SpineShelf } from "@/components/SpineShelf";
 import { Toolbar, type View } from "@/components/Toolbar";
 import { UpNext } from "@/components/UpNext";
 import { isAdmin } from "@/lib/auth";
-import { getStats, hidePrivate, isSort, isStatus, listBooks, listFinishedSeries, STATUSES, type Status } from "@/lib/books";
+import { countMissingCovers, getStats, hidePrivate, isSort, isStatus, listBooks, listFinishedSeries, STATUSES, type Status } from "@/lib/books";
 import { groupBooks, isGroupBy } from "@/lib/group";
 import { upNext } from "@/lib/upnext";
 
@@ -30,11 +31,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const viewParam = (params.view ?? prefs.get("view")?.value) as View;
   const view = VIEWS.includes(viewParam) ? viewParam : "shelf";
 
-  const [rawBooks, stats, admin, finishedSeries] = await Promise.all([
+  const [rawBooks, stats, admin, finishedSeries, missingCovers] = await Promise.all([
     listBooks({ q, genre, sort }),
     getStats(),
     isAdmin(),
     listFinishedSeries(),
+    countMissingCovers(),
   ]);
   const all = admin ? rawBooks : rawBooks.map(hidePrivate);
 
@@ -87,6 +89,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
         </p>
       )}
 
+      {admin && unfiltered && <MissingCovers count={missingCovers} />}
+
       {!libraryEmpty && <Toolbar q={q} status={status} group={group} sort={sort} view={view} counts={counts} />}
 
       {genre && (
@@ -126,6 +130,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
                 <span className="count">
                   {g.books.length} {g.books.length === 1 ? "book" : "books"}
                 </span>
+                {admin && group === "series" && !g.key.startsWith("~") && (
+                  <Link href={`/series?name=${encodeURIComponent(g.key)}`} className="group-action">
+                    <Images className="inline-icon" aria-hidden /> Match covers
+                  </Link>
+                )}
               </header>
             )}
             {view === "shelf" ? (

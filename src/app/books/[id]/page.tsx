@@ -1,4 +1,4 @@
-import { ArrowLeft, Handshake, Pencil, Plus, Undo2 } from "lucide-react";
+import { ArrowLeft, Handshake, Images, Pencil, Plus, Undo2 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -205,6 +205,11 @@ export default async function BookPage({ params }: Props) {
               <Link href={`/books/${book.id}/edit`} className="button">
                 <Pencil aria-hidden /> Edit
               </Link>
+              {book.series && (
+                <Link href={`/series?name=${encodeURIComponent(book.series)}`} className="button">
+                  <Images aria-hidden /> Match series covers
+                </Link>
+              )}
               <DeleteButton id={book.id} title={book.title} />
             </div>
           )}
