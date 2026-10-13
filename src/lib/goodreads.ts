@@ -100,7 +100,8 @@ export function parseGoodreads(text: string): ImportBook[] | string {
       author: author.slice(0, 200),
       series,
       series_number,
-      genre: guessGenre(shelves.split(",").map((s) => s.trim())),
+      // Goodreads shelf names are hyphenated ("young-adult"); match with spaces too.
+      genre: guessGenre(shelves.split(",").flatMap((s) => [s.trim(), s.trim().replace(/-/g, " ")])),
       status,
       rating: rating >= 1 && rating <= 5 ? rating : null,
       isbn: cleanIsbn(col(row, "ISBN13")) ?? cleanIsbn(col(row, "ISBN")),
