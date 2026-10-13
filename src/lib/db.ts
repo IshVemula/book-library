@@ -34,6 +34,12 @@ const MIGRATIONS = [
   )`,
   `CREATE INDEX IF NOT EXISTS rereads_book_id ON rereads (book_id)`,
   `CREATE TABLE IF NOT EXISTS finished_series (name TEXT PRIMARY KEY)`,
+  `CREATE TABLE IF NOT EXISTS cover_images (
+    book_id    INTEGER PRIMARY KEY REFERENCES books(id) ON DELETE CASCADE,
+    mime       TEXT NOT NULL,
+    data       TEXT NOT NULL, -- base64; stored as text so both drivers return it the same way
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  )`,
 ];
 
 // Cache the connection across hot reloads in dev and across requests in prod.

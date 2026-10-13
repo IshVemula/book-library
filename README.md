@@ -35,6 +35,7 @@ That's it! You'll get a link like `my-bookshelf-abc.vercel.app`. To add books, o
 | --- | --- |
 | Bring over your Goodreads books | Log in → **+ Add book** → *Import your whole library*, then follow the steps |
 | Add a book | Log in → **+ Add book** → search for the title → click the right result → **Add to shelf** |
+| Change a cover | Open the book → **Edit** → under the cover, **Upload image**, drop a file on it, or paste an image or image link (e.g. copied from Google) |
 | Log a reread | Open the book → **+ Log a reread** |
 | Lend a book | Open the book → type who has it → **Lend** (only you see this) |
 | Change a book's status | Open the book → click *Currently reading*, *Read* or *Want to read* |
@@ -107,6 +108,8 @@ src/
     import/               Goodreads import
     api/books/route.ts    public JSON API
     api/lookup/route.ts   Open Library search for auto-fill (owner only)
+    api/covers/[id]/      serves uploaded cover images (stored in the database)
+    api/image-proxy/      fetches pasted image links for resizing (owner only)
     actions.ts            server actions: books, status, lending, rereads, import, login
   components/             Shelf, SpineShelf, BookList, UpNext, ImportForm, BookForm, …
   lib/

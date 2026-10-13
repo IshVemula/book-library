@@ -1761,3 +1761,61 @@ a.up-next-card:hover {
     height: 57px;
   }
 }
+
+/* Cover picker (upload / paste / drop a custom cover) */
+
+.cover-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cover-picker.dragging {
+  border-color: var(--accent);
+  background: var(--chip);
+}
+
+.cover-picker-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cover-upload {
+  position: relative;
+  height: 34px;
+  font-size: 0.85rem;
+}
+
+.cover-upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cover-upload:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cover-link {
+  height: 34px;
+  font-size: 0.85rem;
+}
+
+.cover-picker-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.cover-picker .form-error {
+  font-size: 0.8rem;
+}

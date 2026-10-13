@@ -6,6 +6,7 @@ import { saveBook, type FormState } from "@/app/actions";
 import { STATUSES, type Book } from "@/lib/types";
 import type { LookupResult } from "@/lib/openlibrary";
 import { Cover } from "./Cover";
+import { CoverPicker } from "./CoverPicker";
 
 const FIELDS = [
   "title", "author", "series", "series_number", "genre", "status", "rating", "isbn", "cover_url", "notes", "dnf_progress",
@@ -32,6 +33,7 @@ export function BookForm({
   const [state, dispatch, pending] = useActionState<FormState, FormData>(saveBook, {});
   const [f, setF] = useState(() => toFields(book, initial));
   const [filledFrom, setFilledFrom] = useState<string | null>(null);
+  const [upload, setUpload] = useState<string | null>(null); // new cover picked here, as a JPEG data URL
 
   const bind = (key: keyof Fields) => ({
     name: key,
@@ -50,6 +52,7 @@ export function BookForm({
       genre: prev.genre || r.genre || "",
     }));
     setFilledFrom(r.title);
+    if (r.cover_url) setUpload(null);
   }
 
   // Submit manually so React doesn't reset the (controlled) form on errors.
@@ -70,15 +73,23 @@ export function BookForm({
             series: f.series,
             series_number: Number(f.series_number) || null,
             isbn: f.isbn || null,
-            cover_url: f.cover_url || null,
+            cover_url: upload ?? (f.cover_url || null),
             status: f.status as Book["status"],
           }}
         />
-        {f.cover_url && (
-          <button type="button" className="link-button" onClick={() => setF((p) => ({ ...p, cover_url: "" }))}>
+        {(upload || f.cover_url) && (
+          <button
+            type="button"
+            className="link-button"
+            onClick={() => {
+              setUpload(null);
+              setF((p) => ({ ...p, cover_url: "" }));
+            }}
+          >
             Remove cover image
           </button>
         )}
+        <CoverPicker onPick={setUpload} />
       </aside>
 
       <div className="form-main">
@@ -95,6 +106,7 @@ export function BookForm({
         <form onSubmit={onSubmit} className="book-form">
           {book && <input type="hidden" name="id" value={book.id} />}
           <input type="hidden" {...bind("cover_url")} />
+          <input type="hidden" name="cover_upload" value={upload ?? ""} />
 
           <fieldset className="field span-2">
             <legend>Status</legend>

@@ -107,6 +107,29 @@ export async function deleteReread(bookId: number, rereadId: number) {
   await sql(`DELETE FROM rereads WHERE id = $1 AND book_id = $2`, [rereadId, bookId]);
 }
 
+// Uploaded cover images (served from /api/covers/:id)
+
+export const uploadedCoverUrl = (bookId: number) => `/api/covers/${bookId}?v=${Date.now()}`;
+
+export async function saveCoverImage(bookId: number, mime: string, base64: string) {
+  await sql(
+    `INSERT INTO cover_images (book_id, mime, data) VALUES ($1, $2, $3)
+     ON CONFLICT (book_id) DO UPDATE SET mime = EXCLUDED.mime, data = EXCLUDED.data, updated_at = now()`,
+    [bookId, mime, base64],
+  );
+  await sql(`UPDATE books SET cover_url = $2 WHERE id = $1`, [bookId, uploadedCoverUrl(bookId)]);
+}
+
+export async function getCoverImage(bookId: number) {
+  if (!Number.isInteger(bookId)) return null;
+  const [row] = await sql<{ mime: string; data: string }>(`SELECT mime, data FROM cover_images WHERE book_id = $1`, [bookId]);
+  return row ?? null;
+}
+
+export async function deleteCoverImage(bookId: number) {
+  await sql(`DELETE FROM cover_images WHERE book_id = $1`, [bookId]);
+}
+
 // Series you've marked as finished (no more "add the next book" suggestions)
 
 export async function listFinishedSeries() {

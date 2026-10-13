@@ -7,9 +7,11 @@ import {
   addReread,
   createBook,
   deleteBook,
+  deleteCoverImage,
   deleteReread,
   importBooks,
   isStatus,
+  saveCoverImage,
   setLending,
   setSeriesFinished,
   updateBook,
@@ -57,7 +59,7 @@ function parseBook(fd: FormData): BookInput | string {
   if (series_number !== null && !(series_number > 0)) return "Series number must be a positive number.";
 
   const cover_url = text(fd, "cover_url", 1000);
-  if (cover_url && !/^https:\/\//.test(cover_url)) return "Cover image must be an https:// URL.";
+  if (cover_url && !/^(https:\/\/|\/api\/covers\/\d+)/.test(cover_url)) return "Cover image must be an https:// URL.";
 
   const isbn = text(fd, "isbn")?.replace(/[^0-9Xx]/g, "").toUpperCase() || null;
 
@@ -82,11 +84,21 @@ export async function saveBook(_prev: FormState, fd: FormData): Promise<FormStat
   const book = parseBook(fd);
   if (typeof book === "string") return { error: book };
 
+  // A new cover picked in the form arrives as a resized JPEG data URL.
+  const upload = String(fd.get("cover_upload") ?? "");
+  const image = upload ? /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(upload)?.[1] : null;
+  if (upload && (!image || image.length > 2_800_000)) return { error: "That cover image couldn't be saved. Try a smaller one." };
+
   let id = Number(fd.get("id"));
   if (id) {
     await updateBook(id, book);
   } else {
     id = await createBook(book);
+  }
+  if (image) {
+    await saveCoverImage(id, "image/jpeg", image);
+  } else if (!book.cover_url?.startsWith(`/api/covers/${id}`)) {
+    await deleteCoverImage(id); // cover was removed or replaced with a link
   }
   // Adding to a series you'd marked finished means it isn't finished after all.
   if (book.series) await setSeriesFinished(book.series, false);
