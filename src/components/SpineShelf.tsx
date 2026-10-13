@@ -9,7 +9,6 @@ import { spineShape, swatchFor, SPINE_STYLES, bindingKey } from "@/lib/palette";
 import { withTrinkets } from "@/lib/trinkets";
 import { useFlip } from "./useFlip";
 import { bookTags, Cover } from "./Cover";
-import { MotifField, shelfGenre } from "./GenreArt";
 import { Stars } from "./Stars";
 import { Trinket } from "./Trinket";
 
@@ -41,13 +40,6 @@ export function SpineShelf({ books }: { books: Book[] }) {
   return (
     <div className="bookcase spines">
       <ul className="shelf spine-row" ref={ref}>
-        <MotifField
-          as="li"
-          className="motif-wall"
-          genre={shelfGenre(books)}
-          seed={`spine-${books[0]?.id}`}
-          rows={2 * Math.ceil(books.length / 24)}
-        />
         {withTrinkets(books).map((item) => {
           if (item.type === "trinket") {
             return (

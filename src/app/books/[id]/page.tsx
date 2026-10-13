@@ -6,7 +6,6 @@ import { lendBook, logReread, removeReread, returnBook, setStatus } from "@/app/
 import { bookTags, Cover } from "@/components/Cover";
 import { CoverReveal } from "@/components/CoverReveal";
 import { DeleteButton } from "@/components/DeleteButton";
-import { GenreIcon, MotifField } from "@/components/GenreArt";
 import { Stars } from "@/components/Stars";
 import { StatusBadge } from "@/components/StatusBadge";
 import { isAdmin } from "@/lib/auth";
@@ -40,7 +39,6 @@ export default async function BookPage({ params }: Props) {
 
   return (
     <article className="detail">
-      <MotifField genre={book.genre} seed={`detail-${book.id}`} rows={3} className="motif-backdrop" />
       <Link href="/" className="back">
         <ArrowLeft aria-hidden /> Back to the stacks
       </Link>
@@ -89,7 +87,7 @@ export default async function BookPage({ params }: Props) {
                 <dt>Genre</dt>
                 <dd>
                   <Link href={`/?genre=${encodeURIComponent(book.genre)}`} className="chip">
-                    <GenreIcon genre={book.genre} /> {book.genre}
+                    {book.genre}
                   </Link>
                 </dd>
               </div>

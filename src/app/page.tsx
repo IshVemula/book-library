@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { BookPlus, FileUp, Handshake, Images } from "lucide-react";
 import Link from "next/link";
 import { BookList } from "@/components/BookList";
-import { GenreIcon } from "@/components/GenreArt";
 import { MissingCovers } from "@/components/MissingCovers";
 import { Shelf } from "@/components/Shelf";
 import { SpineShelf } from "@/components/SpineShelf";
@@ -127,10 +126,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <section key={g.key} className="group" aria-label={g.title ?? "All books"}>
             {g.title && (
               <header className="group-head">
-                <h2>
-                  {group === "genre" && !g.key.startsWith("~") && <GenreIcon genre={g.key} className="group-icon" />}
-                  {g.title}
-                </h2>
+                <h2>{g.title}</h2>
                 <span className="count">
                   {g.books.length} {g.books.length === 1 ? "book" : "books"}
                 </span>
