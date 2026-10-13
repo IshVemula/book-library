@@ -1,8 +1,10 @@
+import { ArrowLeft, Handshake, Pencil, Plus, Undo2 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { lendBook, logReread, removeReread, returnBook, setStatus } from "@/app/actions";
 import { bookTags, Cover } from "@/components/Cover";
+import { CoverReveal } from "@/components/CoverReveal";
 import { DeleteButton } from "@/components/DeleteButton";
 import { Stars } from "@/components/Stars";
 import { StatusBadge } from "@/components/StatusBadge";
@@ -38,10 +40,12 @@ export default async function BookPage({ params }: Props) {
   return (
     <article className="detail">
       <Link href="/" className="back">
-        ← Back to the stacks
+        <ArrowLeft aria-hidden /> Back to the stacks
       </Link>
       <div className="detail-layout">
-        <Cover book={book} size="large" tags={bookTags(book)} />
+        <CoverReveal>
+          <Cover book={book} size="large" tags={bookTags(book)} />
+        </CoverReveal>
         <div>
           {book.series && (
             <p className="eyebrow">
@@ -117,12 +121,12 @@ export default async function BookPage({ params }: Props) {
               {book.lent_to ? (
                 <>
                   <p>
-                    <span aria-hidden>📖</span> Held hostage by <strong>{book.lent_to}</strong>
+                    <Handshake className="inline-icon" aria-hidden /> Held hostage by <strong>{book.lent_to}</strong>
                     {book.lent_at && <span className="muted"> · {timeAgo(book.lent_at)}</span>}
                   </p>
                   <form action={returnBook.bind(null, book.id)}>
                     <button type="submit" className="button">
-                      It came home
+                      <Undo2 aria-hidden /> It came home
                     </button>
                   </form>
                 </>
@@ -133,7 +137,7 @@ export default async function BookPage({ params }: Props) {
                   </label>
                   <input id="lent_to" name="lent_to" placeholder="Lending it out? To whom, exactly…" required maxLength={80} />
                   <button type="submit" className="button">
-                    Lend
+                    <Handshake aria-hidden /> Lend
                   </button>
                 </form>
               )}
@@ -166,7 +170,9 @@ export default async function BookPage({ params }: Props) {
               </ol>
               {admin && (
                 <details className="log-reread" key={rereads.length}>
-                  <summary>+ Read it again</summary>
+                  <summary>
+                    <Plus className="inline-icon" aria-hidden /> Read it again
+                  </summary>
                   <form action={logReread.bind(null, book.id)} className="reread-form">
                     <label className="field">
                       <span>Rating this time</span>
@@ -197,7 +203,7 @@ export default async function BookPage({ params }: Props) {
           {admin && (
             <div className="form-actions">
               <Link href={`/books/${book.id}/edit`} className="button">
-                Edit
+                <Pencil aria-hidden /> Edit
               </Link>
               <DeleteButton id={book.id} title={book.title} />
             </div>

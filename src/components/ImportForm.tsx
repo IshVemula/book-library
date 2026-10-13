@@ -1,5 +1,6 @@
 "use client";
 
+import { FileUp, Library } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { importGoodreads } from "@/app/actions";
@@ -62,6 +63,7 @@ export function ImportForm() {
         </ol>
         <label className="dropzone">
           <input type="file" accept=".csv,text/csv" onChange={(e) => onFile(e.target.files?.[0])} />
+          <FileUp className="dropzone-icon" aria-hidden />
           <span className="dropzone-title">Choose your Goodreads export</span>
           <span className="muted">goodreads_library_export.csv</span>
         </label>
@@ -174,7 +176,7 @@ export function ImportForm() {
         the &ldquo;Find it&rdquo; search box to grab a cover.
       </p>
       <Link href="/" className="button primary">
-        Go admire your shelves
+        <Library aria-hidden /> Go admire your shelves
       </Link>
     </div>
   );

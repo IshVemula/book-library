@@ -1,5 +1,6 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
 import { removeBook } from "@/app/actions";
 
 export function DeleteButton({ id, title }: { id: number; title: string }) {
@@ -12,7 +13,7 @@ export function DeleteButton({ id, title }: { id: number; title: string }) {
     >
       <input type="hidden" name="id" value={id} />
       <button type="submit" className="button danger">
-        Delete
+        <Trash2 aria-hidden /> Delete
       </button>
     </form>
   );

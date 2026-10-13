@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Newsreader } from "next/font/google";
+import { LogIn, LogOut, Plus } from "lucide-react";
 import Link from "next/link";
 import { logout } from "./actions";
+import { Providers } from "@/components/Providers";
 import { isAdmin } from "@/lib/auth";
 import "./globals.css";
 
@@ -27,22 +29,24 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {admin ? (
               <>
                 <Link href="/books/new" className="button primary">
-                  + Add book
+                  <Plus aria-hidden /> Add book
                 </Link>
                 <form action={logout}>
                   <button type="submit" className="button ghost">
-                    Log out
+                    <LogOut aria-hidden /> Log out
                   </button>
                 </form>
               </>
             ) : (
               <Link href="/login" className="button ghost">
-                Log in
+                <LogIn aria-hidden /> Log in
               </Link>
             )}
           </nav>
         </header>
-        <main>{children}</main>
+        <main>
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );

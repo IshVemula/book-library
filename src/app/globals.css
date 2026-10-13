@@ -1101,7 +1101,7 @@ fieldset.field > legend {
     gap: 24px;
   }
 
-  .detail-layout > .cover-large {
+  .detail-layout > .cover-reveal {
     max-width: 170px;
   }
 
@@ -1818,4 +1818,98 @@ a.up-next-card:hover {
 
 .cover-picker .form-error {
   font-size: 0.8rem;
+}
+
+/* Icons (Lucide) */
+
+.button svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.button {
+  gap: 6px;
+}
+
+.inline-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.14em;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.search svg {
+  width: 16px;
+  height: 16px;
+}
+
+.dropzone-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+
+/* Sliding highlight behind the selected tab / view (animated with Motion) */
+
+.segmented button {
+  position: relative;
+}
+
+.segmented button[aria-pressed="true"] {
+  background: transparent;
+  box-shadow: none;
+}
+
+.pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 7px;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+
+.pill-label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Motion drives spine transforms now; keep CSS out of its way */
+
+.spine:hover,
+.spine[aria-expanded="true"] {
+  transform: none;
+}
+
+.spine-detail-wrap {
+  overflow: hidden;
+}
+
+.spine-detail-cover {
+  flex: none;
+  width: 100px;
+  perspective: 600px;
+  transform-style: preserve-3d;
+}
+
+.spine-detail-cover .cover {
+  width: 100%;
+}
+
+.cover-reveal {
+  width: 100%;
+  max-width: 260px;
 }

@@ -1,18 +1,21 @@
+"use client";
+
 import Link from "next/link";
-import type { Book } from "@/lib/types";
+import { seriesLabel, type Book } from "@/lib/types";
+import { useFlip } from "./useFlip";
 import { bookTags, Cover } from "./Cover";
-import { seriesLabel } from "./Shelf";
 import { Stars } from "./Stars";
 import { StatusBadge } from "./StatusBadge";
 
 export function BookList({ books }: { books: Book[] }) {
+  const ref = useFlip<HTMLUListElement>(books);
   return (
-    <ul className="book-list">
+    <ul className="book-list" ref={ref}>
       {books.map((book) => {
         const series = seriesLabel(book);
         const tags = bookTags(book).filter((t) => t !== "DNF"); // the status badge already says it
         return (
-          <li key={book.id}>
+          <li key={book.id} data-flip={`row-${book.id}`}>
             <Link href={`/books/${book.id}`} className="row">
               <Cover book={book} size="small" />
               <span className="row-main">

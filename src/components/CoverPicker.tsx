@@ -1,5 +1,6 @@
 "use client";
 
+import { ImagePlus } from "lucide-react";
 import { useState } from "react";
 
 const MAX_W = 600;
@@ -96,7 +97,7 @@ export function CoverPicker({ onPick }: { onPick: (dataUrl: string) => void }) {
     >
       <p className="cover-picker-title">Change the cover</p>
       <label className="button cover-upload">
-        Upload image
+        <ImagePlus aria-hidden /> Upload image
         <input
           type="file"
           accept="image/*"

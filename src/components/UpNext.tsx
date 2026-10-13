@@ -1,3 +1,4 @@
+import { Check, Plus } from "lucide-react";
 import Link from "next/link";
 import { finishSeries } from "@/app/actions";
 import type { UpNextItem } from "@/lib/upnext";
@@ -42,11 +43,11 @@ export function UpNext({ items, admin }: { items: UpNextItem[]; admin: boolean }
                         status: "want",
                       })}`}
                     >
-                      Get it
+                      <Plus className="inline-icon" aria-hidden /> Get it
                     </Link>
                     <form action={finishSeries.bind(null, series)}>
                       <button type="submit" className="link-button" title="Stop suggesting books from this series">
-                        I&rsquo;m done here
+                        <Check className="inline-icon" aria-hidden /> I&rsquo;m done here
                       </button>
                     </form>
                   </span>

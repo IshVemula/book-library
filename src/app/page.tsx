@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { BookPlus, FileUp, Handshake } from "lucide-react";
 import Link from "next/link";
 import { BookList } from "@/components/BookList";
 import { Shelf } from "@/components/Shelf";
@@ -76,7 +77,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
 
       {lentOut.length > 0 && (
         <p className="on-loan">
-          <span aria-hidden>📖</span> Held hostage by friends:{" "}
+          <Handshake className="inline-icon" aria-hidden /> Held hostage by friends:{" "}
           {lentOut.map((b, i) => (
             <span key={b.id}>
               {i > 0 && ", "}
@@ -104,10 +105,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           {admin && (
             <div className="form-actions">
               <Link href="/books/new" className="button primary">
-                Shelve your first book
+                <BookPlus aria-hidden /> Shelve your first book
               </Link>
               <Link href="/import" className="button">
-                Smuggle them in from Goodreads
+                <FileUp aria-hidden /> Smuggle them in from Goodreads
               </Link>
             </div>
           )}

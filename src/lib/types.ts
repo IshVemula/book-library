@@ -66,3 +66,8 @@ export type ImportBook = Omit<BookInput, "cover_url" | "dnf_progress"> & {
   goodreads_id: string | null;
   read_count: number;
 };
+
+export function seriesLabel(book: Pick<Book, "series" | "series_number">) {
+  if (!book.series) return null;
+  return book.series_number ? `${book.series} #${book.series_number}` : book.series;
+}
