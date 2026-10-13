@@ -103,7 +103,8 @@ Next.js 15 (App Router, Server Actions) · Postgres (Neon in production, PGlite 
 ```
 src/
   app/
-    page.tsx              bookshelf / list view with grouping, status tabs, search, stats
+    page.tsx              landing page: hero shelf, stats, now reading, recent, favourites, genre mix
+    shelf/page.tsx        the shelves: cover / spine / list views, grouping, status tabs, search
     books/[id]/           book page and edit page
     books/new/            add-a-book page
     login/                owner login

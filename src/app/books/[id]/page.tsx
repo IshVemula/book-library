@@ -39,7 +39,7 @@ export default async function BookPage({ params }: Props) {
 
   return (
     <article className="detail">
-      <Link href="/" className="back">
+      <Link href="/shelf" className="back">
         <ArrowLeft aria-hidden /> Back to the stacks
       </Link>
       <div className="detail-layout">
@@ -49,7 +49,7 @@ export default async function BookPage({ params }: Props) {
         <div>
           {book.series && (
             <p className="eyebrow">
-              <Link href={`/?group=series&q=${encodeURIComponent(book.series)}`}>
+              <Link href={`/shelf?group=series&q=${encodeURIComponent(book.series)}`}>
                 {book.series}
                 {book.series_number ? ` · Book ${book.series_number}` : ""}
               </Link>
@@ -57,7 +57,7 @@ export default async function BookPage({ params }: Props) {
           )}
           <h1>{book.title}</h1>
           <p className="detail-author">
-            by <Link href={`/?group=author&q=${encodeURIComponent(book.author)}`}>{book.author}</Link>
+            by <Link href={`/shelf?group=author&q=${encodeURIComponent(book.author)}`}>{book.author}</Link>
           </p>
 
           {admin ? (
@@ -86,7 +86,7 @@ export default async function BookPage({ params }: Props) {
               <div>
                 <dt>Genre</dt>
                 <dd>
-                  <Link href={`/?genre=${encodeURIComponent(book.genre)}`} className="chip">
+                  <Link href={`/shelf?genre=${encodeURIComponent(book.genre)}`} className="chip">
                     {book.genre}
                   </Link>
                 </dd>

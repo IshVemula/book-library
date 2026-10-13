@@ -206,7 +206,7 @@ export function BookForm({
             <button type="submit" className="button primary" disabled={pending}>
               {pending ? "Saving…" : book ? "Save changes" : "Add to shelf"}
             </button>
-            <Link href={book ? `/books/${book.id}` : "/"} className="button">
+            <Link href={book ? `/books/${book.id}` : "/shelf"} className="button">
               Cancel
             </Link>
           </div>

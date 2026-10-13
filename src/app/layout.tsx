@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Newsreader } from "next/font/google";
-import { LogIn, LogOut, Plus } from "lucide-react";
+import { Library, LogIn, LogOut, Plus } from "lucide-react";
 import Link from "next/link";
 import { logout } from "./actions";
 import { Providers } from "@/components/Providers";
@@ -26,20 +26,23 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             Shelf Indulgence
           </Link>
           <nav>
+            <Link href="/shelf" className="button ghost" aria-label="Shelves" title="Shelves">
+              <Library aria-hidden /> <span className="nav-label">Shelves</span>
+            </Link>
             {admin ? (
               <>
-                <Link href="/books/new" className="button primary">
-                  <Plus aria-hidden /> Add book
+                <Link href="/books/new" className="button primary" aria-label="Add book" title="Add book">
+                  <Plus aria-hidden /> <span className="nav-label">Add book</span>
                 </Link>
                 <form action={logout}>
-                  <button type="submit" className="button ghost">
-                    <LogOut aria-hidden /> Log out
+                  <button type="submit" className="button ghost" aria-label="Log out" title="Log out">
+                    <LogOut aria-hidden /> <span className="nav-label">Log out</span>
                   </button>
                 </form>
               </>
             ) : (
-              <Link href="/login" className="button ghost">
-                <LogIn aria-hidden /> Log in
+              <Link href="/login" className="button ghost" aria-label="Log in" title="Log in">
+                <LogIn aria-hidden /> <span className="nav-label">Log in</span>
               </Link>
             )}
           </nav>

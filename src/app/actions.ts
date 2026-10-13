@@ -146,7 +146,7 @@ export async function saveSeriesCovers(series: string, picks: { bookId: number; 
     await setCover(Number(pick.bookId), String(pick.url), pick.isbn ? String(pick.isbn).slice(0, 20) : null);
   }
   refresh();
-  redirect(`/?group=series&q=${encodeURIComponent(series)}`);
+  redirect(`/shelf?group=series&q=${encodeURIComponent(series)}`);
 }
 
 export async function setStatus(id: number, status: string) {
@@ -160,7 +160,7 @@ export async function removeBook(fd: FormData) {
   await requireAdmin();
   await deleteBook(Number(fd.get("id")));
   refresh();
-  redirect("/");
+  redirect("/shelf");
 }
 
 export async function lendBook(id: number, fd: FormData) {
@@ -232,7 +232,7 @@ export async function login(_prev: FormState, fd: FormData): Promise<FormState> 
     return { error: "That password isn't right." };
   }
   await startSession();
-  redirect("/");
+  redirect("/shelf");
 }
 
 export async function logout() {

@@ -181,7 +181,7 @@ export function ImportForm() {
             ? `Found covers for ${covers.progress.found} of ${covers.progress.checked} books that needed one. For the rest, use “Change the cover” on the book’s edit page.`
             : "Books with an ISBN get their cover automatically."}
       </p>
-      <Link href="/" className="button primary">
+      <Link href="/shelf" className="button primary">
         <Library aria-hidden /> Go admire your shelves
       </Link>
     </div>
