@@ -1,6 +1,6 @@
 # My Library
 
-A personal log of the books I've read: title, author, genre, date finished, rating, notes, and cover (via ISBN from Open Library).
+A personal bookshelf: books on wooden shelves grouped by reading status, author, series or genre, with a list view, live search, and auto-fill from Open Library when adding a book.
 
 Anyone can browse the library; only the owner (password login) can add, edit, or delete books.
 
@@ -34,22 +34,24 @@ Open http://localhost:3000. With no `DATABASE_URL`, data is stored in an embedde
 
 ## API
 
-`GET /api/books?q=&genre=&sort=recent|title|author|rating` returns the library as JSON.
+`GET /api/books?q=&genre=&sort=added|title|author|rating` returns the library as JSON.
 
 ## Structure
 
 ```
 src/
   app/
-    page.tsx              library grid with search, genre filter, sort, stats
+    page.tsx              bookshelf / list view with grouping, status tabs, search, stats
     books/[id]/           book detail, edit page
     books/new/            add page
     login/                owner login
-    api/books/route.ts    JSON API
+    api/books/route.ts    public JSON API
+    api/lookup/route.ts   Open Library search proxy (owner only) for auto-fill
     actions.ts            server actions (save, delete, login, logout)
-  components/             Cover, Stars, BookForm, DeleteButton
+  components/             Shelf, BookList, Toolbar, Cover, BookForm, …
   lib/
     db.ts                 Postgres connection (Neon or PGlite) + schema
     books.ts              book queries
+    group.ts              grouping by status / author / series / genre
     auth.ts               signed-cookie session
 ```

@@ -1,18 +1,25 @@
 type Row = Record<string, unknown>;
 type Query = (text: string, params?: unknown[]) => Promise<Row[]>;
 
-const SCHEMA = `
-CREATE TABLE IF NOT EXISTS books (
-  id          SERIAL PRIMARY KEY,
-  title       TEXT NOT NULL,
-  author      TEXT NOT NULL,
-  genre       TEXT,
-  finished_on DATE,
-  rating      SMALLINT CHECK (rating BETWEEN 1 AND 5),
-  isbn        TEXT,
-  notes       TEXT,
-  created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
-)`;
+// Run in order on startup. Each must be idempotent, and one statement per
+// entry (the Neon HTTP driver can't run several in one query).
+const MIGRATIONS = [
+  `CREATE TABLE IF NOT EXISTS books (
+    id          SERIAL PRIMARY KEY,
+    title       TEXT NOT NULL,
+    author      TEXT NOT NULL,
+    genre       TEXT,
+    finished_on DATE,
+    rating      SMALLINT CHECK (rating BETWEEN 1 AND 5),
+    isbn        TEXT,
+    notes       TEXT,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+  )`,
+  `ALTER TABLE books ADD COLUMN IF NOT EXISTS series TEXT`,
+  `ALTER TABLE books ADD COLUMN IF NOT EXISTS series_number REAL`,
+  `ALTER TABLE books ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'read'`,
+  `ALTER TABLE books ADD COLUMN IF NOT EXISTS cover_url TEXT`,
+];
 
 // Cache the connection across hot reloads in dev and across requests in prod.
 const cache = globalThis as unknown as { bookDb?: Promise<Query> };
@@ -31,11 +38,11 @@ async function connect(): Promise<Query> {
     }
     // Local development: an embedded Postgres stored in ./.pglite
     const { PGlite } = await import("@electric-sql/pglite");
-    const db = new PGlite("./.pglite");
+    const db = new PGlite(process.env.PGLITE_PATH ?? "./.pglite");
     query = async (text, params = []) => (await db.query<Row>(text, params)).rows;
   }
 
-  await query(SCHEMA);
+  for (const migration of MIGRATIONS) await query(migration);
   return query;
 }
 
