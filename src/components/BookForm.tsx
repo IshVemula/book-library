@@ -67,6 +67,7 @@ export function BookForm({
           book={{
             title: f.title || "Untitled",
             author: f.author,
+            series: f.series,
             isbn: f.isbn || null,
             cover_url: f.cover_url || null,
             status: f.status as Book["status"],
