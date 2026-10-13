@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Library
 
-## Getting Started
+A personal log of the books I've read: title, author, genre, date finished, rating, notes, and cover (via ISBN from Open Library).
 
-First, run the development server:
+Anyone can browse the library; only the owner (password login) can add, edit, or delete books.
+
+**Stack:** Next.js 15 (App Router, Server Actions) · Postgres (Neon in production, embedded PGlite locally) · deployed on Vercel.
+
+## Run locally
 
 ```bash
+npm install
+cp .env.example .env.local   # then set ADMIN_PASSWORD and SESSION_SECRET
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. With no `DATABASE_URL`, data is stored in an embedded Postgres in `./.pglite` (git-ignored). The `books` table is created automatically on first request.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Name | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Postgres connection string (Neon). Required in production. |
+| `ADMIN_PASSWORD` | Password for the owner login. |
+| `SESSION_SECRET` | Random string for signing the login cookie (`openssl rand -base64 32`). |
 
-## Learn More
+## Deploy (Vercel + Neon)
 
-To learn more about Next.js, take a look at the following resources:
+1. Push this repo to GitHub.
+2. On [vercel.com](https://vercel.com), sign up with GitHub → **Add New → Project** → import the repo.
+3. In the project, open **Storage → Create Database → Neon (Postgres)** and connect it. This sets `DATABASE_URL` automatically.
+4. In **Settings → Environment Variables**, add `ADMIN_PASSWORD` and `SESSION_SECRET`.
+5. **Deployments → Redeploy**. Every push to `main` deploys automatically after that.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`GET /api/books?q=&genre=&sort=recent|title|author|rating` returns the library as JSON.
 
-## Deploy on Vercel
+## Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/
+    page.tsx              library grid with search, genre filter, sort, stats
+    books/[id]/           book detail, edit page
+    books/new/            add page
+    login/                owner login
+    api/books/route.ts    JSON API
+    actions.ts            server actions (save, delete, login, logout)
+  components/             Cover, Stars, BookForm, DeleteButton
+  lib/
+    db.ts                 Postgres connection (Neon or PGlite) + schema
+    books.ts              book queries
+    auth.ts               signed-cookie session
+```
