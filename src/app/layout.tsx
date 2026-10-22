@@ -5,6 +5,7 @@ import Link from "next/link";
 import { logout } from "./actions";
 import { Providers } from "@/components/Providers";
 import { isAdmin } from "@/lib/auth";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const sans = Inter({ variable: "--font-sans", subsets: ["latin"] });
@@ -61,6 +62,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           </a>
           .
         </footer>
+        <Analytics />
       </body>
     </html>
   );
